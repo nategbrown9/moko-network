@@ -17,7 +17,7 @@ class KtorCodegen : AbstractKotlinCodegen() {
      */
     init {
         artifactId = "kotlin-ktor-client"
-        packageName = "dev.icerock.moko.network.generated"
+        packageName = "org.sagebionetworks.bridge.mpp.network.generated"
 
         typeMapping["array"] = "kotlin.collections.List"
         typeMapping["number"] = "kotlin.Double"
@@ -26,6 +26,9 @@ class KtorCodegen : AbstractKotlinCodegen() {
         typeMapping["date-time"] = "kotlin.String"
         typeMapping["Date"] = "kotlin.String"
         typeMapping["DateTime"] = "kotlin.String"
+
+        typeMapping["object"] = "JsonElement"
+        importMapping["JsonElement"] = "kotlinx.serialization.json.JsonElement"
 
         //TODO: Support files via ByteArray / LargeTextContent
         typeMapping["File"] = "kotlin.String"
@@ -83,5 +86,13 @@ class KtorCodegen : AbstractKotlinCodegen() {
 
     override fun getEnumPropertyNaming(): CodegenConstants.ENUM_PROPERTY_NAMING_TYPE {
         return CodegenConstants.ENUM_PROPERTY_NAMING_TYPE.UPPERCASE
+    }
+
+    override fun toModelImport(name: String): String? {
+        return if (name.contains("jsonElement", ignoreCase = true)) {
+            name
+        } else {
+            return super.toModelImport(name)
+        }
     }
 }

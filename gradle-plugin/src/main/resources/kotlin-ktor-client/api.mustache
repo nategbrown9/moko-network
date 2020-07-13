@@ -14,6 +14,7 @@ import io.ktor.http.Parameters
 import io.ktor.http.takeFrom
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.builtins.list
+import kotlinx.serialization.builtins.serializer
 import dev.icerock.moko.network.LargeTextContent
 import io.ktor.client.call.ReceivePipelineException
 
@@ -31,7 +32,7 @@ internal class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpCli
     {{/allParams}}* @return {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}
     */{{#returnType}}
     @Suppress("UNCHECKED_CAST"){{/returnType}}
-    suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Unit{{/returnType}} {
+    suspend fun {{operationId}}({{#allParams}}{{paramName}}: {{{dataType}}}{{^required}}?{{/required}},{{/allParams}} sessionToken: String?=null) : {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Unit{{/returnType}} {
         val builder = HttpRequestBuilder()
 
         builder.method = HttpMethod.{{httpMethod}}
@@ -83,6 +84,11 @@ internal class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", httpCli
         {{/hasFormParams}}
         with(builder.headers) {
             append("Accept", "application/json")
+        }
+        if (sessionToken != null) {
+            with(builder.headers) {
+                append("Bridge-Session", sessionToken)
+            }
         }
 
         try {

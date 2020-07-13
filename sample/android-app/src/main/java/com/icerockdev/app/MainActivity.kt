@@ -9,8 +9,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.icerockdev.library.TestViewModel
 import dev.icerock.moko.mvvm.getViewModel
+import org.sagebionetworks.bridge.mpp.TestViewModel
 
 class MainActivity : AppCompatActivity() {
 
